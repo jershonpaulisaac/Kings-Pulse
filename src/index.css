@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-raisin text-platinum selection:bg-lavender selection:text-white font-inter;
+  }
+}
+
+@layer components {
+  .sculpted-card {
+    @apply bg-charcoal shadow-sculpted border border-white/5;
+    clip-path: polygon(
+      0% 15px, 15px 0%, 
+      calc(100% - 30px) 0%, 100% 30px, 
+      100% calc(100% - 15px), calc(100% - 15px) 100%, 
+      20px 100%, 0% calc(100% - 20px)
+    );
+  }
+
+  .sculpted-button {
+    @apply bg-lavender text-platinum font-bold px-6 py-3 transition-all active:scale-95 shadow-lg hover:shadow-lavender/20;
+    clip-path: polygon(
+      10px 0%, 100% 0%, 
+      100% calc(100% - 10px), calc(100% - 10px) 100%, 
+      0% 100%, 0% 10px
+    );
+  }
+
+  .sculpted-input {
+    @apply bg-raisin border border-lavender/20 p-4 w-full focus:outline-none focus:border-lavender transition-all;
+    clip-path: polygon(
+      0% 0%, 100% 0%, 
+      100% calc(100% - 8px), calc(100% - 8px) 100%, 
+      0% 100%
+    );
+  }
+
+  .glass-panel {
+    @apply bg-charcoal/80 backdrop-blur-xl border border-white/10;
+  }
+}
