@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, MessageSquare, Calendar, User, Settings as SettingsIcon, LogOut, Bell, Trophy, Users } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useProfile } from '../hooks/useProfile';
 
 const AppLayout = ({ children }) => {
     const location = useLocation();
     const { logout, user } = useAuth();
+    const { data: profile } = useProfile(user?.id);
 
     return (
         <div className="theme-app min-h-screen flex bg-[#1E1D2B]">
@@ -44,7 +45,7 @@ const AppLayout = ({ children }) => {
                 {/* Topbar (Dark Mode) */}
                 <header className="h-20 bg-[#1E1D2B]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-10 px-8 flex items-center justify-between">
                     <div className="flex-1 max-w-xl">
-                        <p className="text-sm font-bold text-platinum/40">Welcome back, <span className="text-white">Scholar</span></p>
+                        <p className="text-sm font-bold text-platinum/40">Welcome back, <span className="text-white">{profile?.full_name?.split(' ')[0] || 'Scholar'}</span></p>
                     </div>
 
                     <div className="flex items-center space-x-6">

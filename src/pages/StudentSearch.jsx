@@ -8,12 +8,15 @@ const StudentSearch = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [filterDept, setFilterDept] = useState('ALL')
 
-    const { data: students, isLoading } = useQuery('students-directory', async () => {
+    const { data: students, isLoading, error } = useQuery('students-directory', async () => {
         const { data, error } = await supabase
             .from('users')
             .select('*')
             .order('full_name', { ascending: true })
-        if (error) throw error
+        if (error) {
+            console.error("Student Fetch Error:", error)
+            throw error
+        }
         return data
     })
 
@@ -66,6 +69,11 @@ const StudentSearch = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {isLoading ? (
                     <p className="text-platinum/50">Loading directory...</p>
+                ) : error ? (
+                    <div className="col-span-full py-10 text-center">
+                        <p className="text-rose-400 font-bold mb-2">Failed to load student directory.</p>
+                        <p className="text-xs text-platinum/50">Please try again later.</p>
+                    </div>
                 ) : filteredStudents.length === 0 ? (
                     <p className="text-platinum/50 col-span-full text-center py-10">No students found matching your criteria.</p>
                 ) : (

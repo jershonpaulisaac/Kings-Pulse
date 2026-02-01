@@ -25,26 +25,6 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
                 <div>
                     <h2 className="text-3xl font-bold text-white tracking-tight">Dashboard</h2>
-                    <p className="text-platinum/60 text-sm mt-1">Welcome back, <span className="text-lavender">{profile?.full_name?.split(' ')[0] || 'Scholar'}</span>.</p>
-                </div>
-
-                {/* Creative Search Shortcut */}
-                <div className="relative w-full md:w-96 group">
-                    <div className="absolute inset-0 bg-lavender/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
-                    <div className="relative bg-[#1E1D2B] border border-white/10 rounded-full flex items-center px-6 py-3 shadow-xl">
-                        <Users size={18} className="text-lavender mr-3" />
-                        <input
-                            type="text"
-                            placeholder="Find a student (e.g. 'Java Developer')"
-                            className="bg-transparent border-none focus:outline-none text-white text-sm w-full placeholder:text-platinum/30"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    navigate(`/student-search?q=${e.target.value}`)
-                                }
-                            }}
-                        />
-                        <div className="hidden group-hover:block absolute right-4 text-[10px] font-bold text-lavender bg-lavender/10 px-2 py-1 rounded">PRESS ENTER</div>
-                    </div>
                 </div>
             </div>
 
