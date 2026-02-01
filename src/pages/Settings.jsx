@@ -12,8 +12,6 @@ const Settings = () => {
     const [settings, setSettings] = useState({
         notifications_email: true,
         notifications_push: true,
-        profile_visibility: 'public', // public, private   
-        theme: 'dark'
     })
 
     const [activeTab, setActiveTab] = useState('general')
@@ -117,30 +115,6 @@ const Settings = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className="pt-6">
-                                    <h2 className="text-lg font-bold border-b border-white/5 pb-4 mb-6">Appearance</h2>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="font-bold text-white">Theme Preference</p>
-                                            <p className="text-xs text-platinum/50">Choose how the application looks.</p>
-                                        </div>
-                                        <div className="flex p-1 bg-[#1E1D2B] rounded-lg border border-white/5">
-                                            <button
-                                                onClick={() => handleChange('theme', 'dark')}
-                                                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${settings.theme === 'dark' ? 'bg-[#2D2B3F] text-white shadow' : 'text-platinum/40'}`}
-                                            >
-                                                Dark
-                                            </button>
-                                            <button
-                                                onClick={() => handleChange('theme', 'light')}
-                                                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${settings.theme === 'light' ? 'bg-white text-black shadow' : 'text-platinum/40'}`}
-                                            >
-                                                Light
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         )}
 
@@ -173,37 +147,16 @@ const Settings = () => {
 
                                 <div className="space-y-6">
                                     <div>
-                                        <p className="font-bold text-white mb-4">Profile Visibility</p>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <button
-                                                onClick={() => handleChange('profile_visibility', 'public')}
-                                                className={`p-4 rounded-xl border text-left transition-all ${settings.profile_visibility === 'public' ? 'bg-lavender/10 border-lavender' : 'bg-[#1E1D2B] border-white/5 hover:border-white/10'}`}
-                                            >
-                                                <div className="flex items-center mb-2">
-                                                    <GlobeIcon active={settings.profile_visibility === 'public'} />
-                                                    <span className={`ml-2 text-sm font-bold ${settings.profile_visibility === 'public' ? 'text-lavender' : 'text-white'}`}>Public</span>
-                                                </div>
-                                                <p className="text-xs text-platinum/50">Visible to all students and faculty.</p>
-                                            </button>
-
-                                            <button
-                                                onClick={() => handleChange('profile_visibility', 'private')}
-                                                className={`p-4 rounded-xl border text-left transition-all ${settings.profile_visibility === 'private' ? 'bg-lavender/10 border-lavender' : 'bg-[#1E1D2B] border-white/5 hover:border-white/10'}`}
-                                            >
-                                                <div className="flex items-center mb-2">
-                                                    <LockIcon active={settings.profile_visibility === 'private'} />
-                                                    <span className={`ml-2 text-sm font-bold ${settings.profile_visibility === 'private' ? 'text-lavender' : 'text-white'}`}>Private</span>
-                                                </div>
-                                                <p className="text-xs text-platinum/50">Only visible to you and connections.</p>
-                                            </button>
-                                        </div>
+                                        <h3 className="text-sm font-bold text-white mb-2">Data Management</h3>
+                                        <p className="text-xs text-platinum/50">Your data is stored securely. For direct access or removal requests, please contact administration.</p>
                                     </div>
 
                                     <div className="pt-6 border-t border-white/5">
                                         <h3 className="text-sm font-bold text-rose-400 mb-2">Danger Zone</h3>
-                                        <button className="flex items-center text-xs font-bold text-rose-400 hover:text-rose-300 transition-colors">
-                                            <Trash2 size={14} className="mr-2" /> Request Account Deletion
-                                        </button>
+                                        <p className="text-xs text-platinum/50 mb-4">Account deletion is irreversible. Please contact support to process this request.</p>
+                                        <a href="mailto:support@kingspulse.edu?subject=Account Deletion Request" className="inline-flex items-center px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl text-xs font-bold text-rose-400 hover:bg-rose-500/20 transition-colors">
+                                            <Trash2 size={14} className="mr-2" /> Email Support to Delete Account
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -242,14 +195,6 @@ const Toggle = ({ label, desc, active, onToggle }) => (
             <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${active ? 'translate-x-6' : ''}`} />
         </button>
     </div>
-)
-
-const GlobeIcon = ({ active }) => (
-    <Eye size={16} className={active ? 'text-lavender' : 'text-platinum/50'} />
-)
-
-const LockIcon = ({ active }) => (
-    <Lock size={16} className={active ? 'text-lavender' : 'text-platinum/50'} />
 )
 
 const CheckIcon = () => (
