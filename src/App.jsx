@@ -13,6 +13,7 @@ import Community from './pages/Community'
 import Timeline from './pages/Timeline'
 import Settings from './pages/Settings'
 import Leaderboard from './pages/Leaderboard'
+import UserManagement from './pages/UserManagement'
 
 const App = () => {
     return (
@@ -46,6 +47,7 @@ const AppLayout = () => {
                     <NavItem to="/community" icon={MessageSquare} label="Community" active={location.pathname === '/community'} />
                     <NavItem to="/leaderboard" icon={Trophy} label="Leaderboard" active={location.pathname === '/leaderboard'} />
                     <NavItem to="/timeline" icon={Calendar} label="Timeline" active={location.pathname === '/timeline'} />
+                    <NavItem to="/users" icon={User} label="User Management" active={location.pathname === '/users'} />
                 </nav>
 
                 <div className="p-4 border-t border-white/5 space-y-1">
@@ -108,6 +110,7 @@ const AppLayout = () => {
                                 <Route path="/leaderboard" element={<Leaderboard />} />
                                 <Route path="/timeline" element={<Timeline />} />
                                 <Route path="/settings" element={<Settings />} />
+                                <Route path="/users" element={<UserManagement />} />
                                 <Route path="*" element={<Dashboard />} />
                             </Routes>
                         </motion.div>
