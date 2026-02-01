@@ -17,7 +17,7 @@ const LandingPage = () => {
                 <div className="flex items-center space-x-2">
                     <h1 className="text-3xl font-black font-outfit tracking-tighter">KINGS <span className="text-lavender">PULSE</span></h1>
                 </div>
-                <Link to="/auth" className="sculpted-button !px-8 !text-xs tracking-[0.2em]">ACCESS PORTAL</Link>
+                <Link to="/login" className="sculpted-button !px-8 !text-xs tracking-[0.2em]">ACCESS PORTAL</Link>
             </nav>
 
             <main className="relative z-10 px-8 md:px-16 pt-20">
@@ -46,7 +46,7 @@ const LandingPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            <Link to="/auth" className="sculpted-button group flex items-center !text-lg !px-10 !py-5">
+                            <Link to="/login" className="sculpted-button group flex items-center !text-lg !px-10 !py-5">
                                 IDENTITY SYNC <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
                             </Link>
                         </motion.div>
