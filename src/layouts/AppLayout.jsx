@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, MessageSquare, Calendar, User, Settings as SettingsIcon, LogOut, Bell, Trophy } from 'lucide-react';
+import { Home, Search, MessageSquare, Calendar, User, Settings as SettingsIcon, LogOut, Bell, Trophy, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const AppLayout = ({ children }) => {
@@ -21,9 +21,9 @@ const AppLayout = ({ children }) => {
                 <nav className="flex-1 px-4 py-4 space-y-2">
                     <NavItem to="/dashboard" icon={Home} label="Dashboard" active={location.pathname === '/dashboard'} />
                     <NavItem to="/discover" icon={Search} label="Projects" active={location.pathname === '/discover'} />
-                    <NavItem to="/community" icon={MessageSquare} label="Community" active={location.pathname === '/community'} />
-                    <NavItem to="/leaderboard" icon={Trophy} label="Leaderboard" active={location.pathname === '/leaderboard'} />
-                    <NavItem to="/timeline" icon={Calendar} label="Timeline" active={location.pathname === '/timeline'} />
+                    <NavItem to="/community" icon={MessageSquare} label="Collaborate" active={location.pathname === '/community'} />
+                    <NavItem to="/student-search" icon={Users} label="Student Search" active={location.pathname === '/student-search'} />
+                    <NavItem to="/events" icon={Calendar} label="Events" active={location.pathname === '/events'} />
                 </nav>
 
                 <div className="p-4 border-t border-white/5 space-y-1">

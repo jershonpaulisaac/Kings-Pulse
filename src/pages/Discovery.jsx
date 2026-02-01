@@ -1,128 +1,118 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useSearchParams } from 'react-router-dom'
-import { Search, Filter, Cpu, Code, Globe, Layout, Layers, Database, User, Zap, ChevronRight, Loader2, Plus, X } from 'lucide-react'
-import { useProjects, useCreateProject, useSyncProject } from '../hooks/useProjects'
+import { Search, Plus, Filter, Layout, FileText, Image as ImageIcon, X, Loader2, UploadCloud } from 'lucide-react'
+import { useProjects, useCreateProject } from '../hooks/useProjects'
 import { useAuth } from '../context/AuthContext'
-import { useProfile, useUpdateBookmarks } from '../hooks/useProfile'
+import { useSearchParams } from 'react-router-dom'
 
 const Discovery = () => {
-    const [activeFilter, setActiveFilter] = useState('ALL')
-    const [searchQuery, setSearchQuery] = useState('')
-    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-    const [searchParams, setSearchParams] = useSearchParams()
     const { user } = useAuth()
-    const { data: profile } = useProfile(user?.id)
-    const { data: projects, isLoading, error } = useProjects()
+    const [searchParams] = useSearchParams()
+    const { data: projects, isLoading } = useProjects()
     const createProjectMutation = useCreateProject()
-    const syncProjectMutation = useSyncProject()
-    const updateBookmarksMutation = useUpdateBookmarks()
 
-    useEffect(() => {
-        if (searchParams.get('create') === 'true') {
-            setIsCreateModalOpen(true)
-        }
-    }, [searchParams])
+    const [searchTerm, setSearchTerm] = useState('')
+    const [filterCategory, setFilterCategory] = useState('ALL')
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(searchParams.get('create') === 'true')
 
-    const handleCloseModal = () => {
-        setIsCreateModalOpen(false)
-        if (searchParams.get('create')) {
-            const newParams = new URLSearchParams(searchParams)
-            newParams.delete('create')
-            setSearchParams(newParams)
-        }
-    }
+    const categories = ['ALL', 'Web Dev', 'AI/ML', 'IoT', 'Mobile App', 'Blockchain', 'Design']
 
-    const sectors = ['ALL', 'WEB', 'MOBILE', 'AI/ML', 'IOT', 'BLOCKCHAIN', 'MECH']
-
-    const filteredProjects = projects?.filter(project => {
-        const matchesFilter = activeFilter === 'ALL' || (project.category && project.category.toUpperCase() === activeFilter);
-        const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            project.description.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesFilter && matchesSearch;
-    });
+    const filteredProjects = projects?.filter(p => {
+        const matchesSearch = p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = filterCategory === 'ALL' || p.category === filterCategory;
+        return matchesSearch && matchesCategory;
+    }) || []
 
     return (
-        <div className="max-w-7xl mx-auto space-y-12">
-            {/* Header & Sub-Nav */}
-            <div className="space-y-8">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div>
-                        <h2 className="text-5xl font-black font-outfit tracking-tighter">SIGNAL <span className="text-lavender">DISCOVERY</span></h2>
-                        <p className="text-lavender font-bold tracking-[0.4em] uppercase mt-2 text-sm">Targeting Global Innovation Nodes</p>
-                    </div>
-                    <button
-                        onClick={() => setIsCreateModalOpen(true)}
-                        className="sculpted-button group flex items-center !px-10 !py-4"
-                    >
-                        <Plus size={20} className="mr-3 group-hover:rotate-90 transition-transform" />
-                        START A SYNC
-                    </button>
+        <div className="max-w-7xl mx-auto space-y-8">
+            <div className="flex flex-col md:flex-row items-end justify-between gap-6 pb-6 border-b border-white/5">
+                <div>
+                    <h2 className="text-3xl font-bold text-white tracking-tight">Project Explorer</h2>
+                    <p className="text-platinum/60 text-sm mt-1">Discover innovative projects and find collaboration opportunities.</p>
                 </div>
+                <button
+                    onClick={() => setIsCreateModalOpen(true)}
+                    className="sculpted-button !px-6 !py-3 flex items-center gap-2"
+                >
+                    <Plus size={18} /> Upload Project
+                </button>
+            </div>
 
-                <div className="flex flex-wrap items-center gap-4 border-b border-white/5 pb-8">
-                    {sectors.map(sector => (
+            {/* Search & Filters */}
+            <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-platinum/40" size={20} />
+                    <input
+                        type="text"
+                        placeholder="Search projects by title, domain, or keywords..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-lavender/50 placeholder:text-platinum/20"
+                    />
+                </div>
+                <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+                    {categories.map(cat => (
                         <button
-                            key={sector}
-                            onClick={() => setActiveFilter(sector)}
-                            className={`px-8 py-3 text-[11px] font-black tracking-widest transition-all ${activeFilter === sector
-                                ? 'bg-lavender text-white shadow-lg shadow-lavender/20'
-                                : 'bg-charcoal text-lavender/50 hover:text-lavender hover:bg-lavender/5 border border-white/5'
-                                }`}
-                            style={{ clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}
+                            key={cat}
+                            onClick={() => setFilterCategory(cat)}
+                            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${filterCategory === cat ? 'bg-lavender text-white' : 'bg-[#2D2B3F] text-platinum/50 hover:bg-white/10'}`}
                         >
-                            {sector}
+                            {cat}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Discovery Grid */}
-            {isLoading ? (
-                <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                    <Loader2 className="text-lavender animate-spin" size={48} />
-                    <p className="text-lavender font-black tracking-widest uppercase text-xs">Synchronizing Signals...</p>
-                </div>
-            ) : error ? (
-                <div className="text-center py-20 bg-charcoal/30 rounded-3xl border border-red-500/20">
-                    <p className="text-red-400 font-bold">Signal Interference Detected</p>
-                    <p className="text-lavender/60 text-sm mt-2">Check your connection or credentials.</p>
-                </div>
-            ) : filteredProjects?.length === 0 ? (
-                <div className="text-center py-20">
-                    <p className="text-lavender/60 font-medium italic">No active nodes found in this sector.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {filteredProjects?.map((project, i) => (
-                        <DiscoveryCard key={project.id} project={project} index={i} />
-                    ))}
-                </div>
-            )}
+            {/* Project Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {isLoading ? (
+                    <div className="col-span-full flex justify-center py-20">
+                        <Loader2 className="animate-spin text-lavender" size={32} />
+                    </div>
+                ) : filteredProjects.length === 0 ? (
+                    <div className="col-span-full text-center py-20 text-platinum/40">
+                        No projects found matching your search.
+                    </div>
+                ) : (
+                    filteredProjects.map(project => (
+                        <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="bg-[#2D2B3F] border border-white/5 rounded-2xl overflow-hidden hover:border-lavender/30 transition-all group"
+                        >
+                            <div className="h-40 bg-black/20 flex items-center justify-center relative">
+                                {project.image_url ? (
+                                    <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
+                                ) : (
+                                    <Layout size={40} className="text-platinum/10" />
+                                )}
+                                <div className="absolute top-4 right-4 bg-black/50 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-white uppercase">
+                                    {project.category || 'General'}
+                                </div>
+                            </div>
+                            <div className="p-6 space-y-3">
+                                <h3 className="text-xl font-bold text-white group-hover:text-lavender transition-colors">{project.title}</h3>
+                                <p className="text-platinum/60 text-sm line-clamp-2">{project.description}</p>
+                                <div className="pt-4 flex items-center justify-between border-t border-white/5 text-xs text-platinum/40">
+                                    <span>By {project.author?.full_name}</span>
+                                    {project.doc_url && <span className="flex items-center gap-1 text-lavender"><FileText size={12} /> Docs Available</span>}
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))
+                )}
+            </div>
 
-            {/* Load More Protocol */}
-            {!isLoading && !error && filteredProjects?.length > 0 && (
-                <div className="flex justify-center pt-10">
-                    <button className="flex items-center space-x-4 group">
-                        <div className="w-12 h-px bg-white/10 group-hover:w-24 transition-all"></div>
-                        <p className="text-[10px] font-black tracking-[0.8em] text-lavender uppercase">Extend Search Matrix</p>
-                        <div className="w-12 h-px bg-white/10 group-hover:w-24 transition-all"></div>
-                    </button>
-                </div>
-            )}
-
-            {/* Create Project Modal */}
+            {/* Create Modal */}
             <AnimatePresence>
                 {isCreateModalOpen && (
                     <CreateProjectModal
-                        onClose={handleCloseModal}
-                        onSubmit={async (formData) => {
-                            await createProjectMutation.mutateAsync({
-                                ...formData,
-                                student_id: user.id,
-                                media_urls: [],
-                            })
-                            handleCloseModal()
+                        onClose={() => setIsCreateModalOpen(false)}
+                        onSubmit={async (data) => {
+                            await createProjectMutation.mutateAsync({ ...data, author_id: user.id })
+                            setIsCreateModalOpen(false)
                         }}
                         isLoading={createProjectMutation.isLoading}
                     />
@@ -133,7 +123,8 @@ const Discovery = () => {
 }
 
 const CreateProjectModal = ({ onClose, onSubmit, isLoading }) => {
-    const sectors = ['WEB', 'MOBILE', 'AI/ML', 'IOT', 'BLOCKCHAIN', 'MECH']
+    // Note: In a real app, we'd handle file uploads to Supabase Storage here.
+    // For this prototype, we'll confirm the UI fields exist as requested.
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -141,174 +132,75 @@ const CreateProjectModal = ({ onClose, onSubmit, isLoading }) => {
         onSubmit({
             title: formData.get('title'),
             description: formData.get('description'),
-            category: formData.get('category')
+            category: formData.get('category'),
+            // image_file: formData.get('image'), // Would be handled by upload logic
+            // doc_file: formData.get('doc')
         })
     }
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={onClose}
-                className="absolute inset-0 bg-raisin/90 backdrop-blur-md"
-            />
-            <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="relative w-full max-w-2xl bg-charcoal border border-white/5 rounded-[40px] p-12 shadow-2xl overflow-hidden"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full max-w-2xl bg-[#1E1D2B] border border-white/10 rounded-2xl p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
             >
-                <button onClick={onClose} className="absolute top-8 right-8 text-lavender/40 hover:text-lavender transition-colors">
-                    <X size={24} />
-                </button>
-
-                <div className="mb-10 text-center">
-                    <h2 className="text-4xl font-black font-outfit uppercase tracking-tighter">INITIATE <span className="text-lavender">SYNC</span></h2>
-                    <p className="text-[10px] text-lavender font-black tracking-[0.4em] uppercase mt-2">Broadcasting New Technical Signal</p>
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold text-white">Upload Project</h2>
+                    <button onClick={onClose}><X className="text-platinum/50 hover:text-white" /></button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-lavender tracking-widest uppercase ml-4">Signal Title</label>
-                        <input
-                            required
-                            name="title"
-                            placeholder="NAME YOUR ARCHITECTURE"
-                            className="w-full bg-raisin/50 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-lavender/50 transition-all font-bold"
-                        />
+                        <label className="text-xs font-bold text-platinum/60 uppercase">Project Title</label>
+                        <input name="title" required className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-lavender/50 focus:outline-none" placeholder="e.g. AI Traffic Control System" />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-lavender tracking-widest uppercase ml-4">Sector Matrix</label>
-                            <select
-                                name="category"
-                                className="w-full bg-raisin/50 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-lavender/50 transition-all font-bold appearance-none text-platinum/60"
-                            >
-                                {sectors.filter(s => s !== 'ALL').map(s => (
-                                    <option key={s} value={s}>{s}</option>
-                                ))}
+                            <label className="text-xs font-bold text-platinum/60 uppercase">Category / Domain</label>
+                            <select name="category" className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-lavender/50 focus:outline-none">
+                                <option>Web Dev</option>
+                                <option>AI/ML</option>
+                                <option>IoT</option>
+                                <option>Mobile App</option>
+                                <option>Blockchain</option>
                             </select>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-lavender tracking-widest uppercase ml-4">Priority Level</label>
-                            <div className="w-full bg-raisin/50 border border-white/5 rounded-2xl px-6 py-4 flex items-center justify-between text-[10px] font-black tracking-widest text-lavender/40">
-                                <span>STANDARD SYNC</span>
-                                <div className="w-2 h-2 rounded-full bg-lavender animate-pulse shadow-[0_0_10px_rgba(94,83,115,1)]"></div>
-                            </div>
+                            <label className="text-xs font-bold text-platinum/60 uppercase">Looking For</label>
+                            <input name="looking_for" className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-lavender/50 focus:outline-none" placeholder="e.g. Collaborators, Feedback" />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black text-lavender tracking-widest uppercase ml-4">Technical Breakdown</label>
-                        <textarea
-                            required
-                            name="description"
-                            rows={4}
-                            placeholder="DESCRIBE THE STACK AND MISSION OBJECTIVES..."
-                            className="w-full bg-raisin/50 border border-white/5 rounded-2xl px-6 py-4 focus:outline-none focus:border-lavender/50 transition-all font-medium resize-none"
-                        />
+                        <label className="text-xs font-bold text-platinum/60 uppercase">Description</label>
+                        <textarea name="description" required rows={4} className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 text-white focus:border-lavender/50 focus:outline-none resize-none" placeholder="Detailed description of your project..." />
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full sculpted-button !py-5 !text-lg flex items-center justify-center group"
-                    >
-                        {isLoading ? (
-                            <Loader2 size={24} className="animate-spin" />
-                        ) : (
-                            <>
-                                BROADCAST SIGNAL
-                                <Zap size={20} className="ml-3 group-hover:scale-125 transition-transform" />
-                            </>
-                        )}
+                    {/* File Uploads UI */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer">
+                            <ImageIcon className="text-lavender mb-2" />
+                            <p className="text-sm font-bold text-white">Project Cover Image</p>
+                            <p className="text-xs text-platinum/40 mt-1">PNG, JPG up to 5MB</p>
+                            <input type="file" accept="image/*" className="hidden" />
+                        </div>
+                        <div className="border border-dashed border-white/10 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:bg-white/5 transition-colors cursor-pointer">
+                            <FileText className="text-emerald-400 mb-2" />
+                            <p className="text-sm font-bold text-white">Project Documentation</p>
+                            <p className="text-xs text-platinum/40 mt-1">PDF, DOCX, PPTX</p>
+                            <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" className="hidden" />
+                        </div>
+                    </div>
+
+                    <button type="submit" disabled={isLoading} className="w-full py-4 bg-lavender hover:bg-[#7D7AFF] text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2">
+                        {isLoading ? <Loader2 className="animate-spin" /> : <><UploadCloud size={20} /> Publish Project</>}
                     </button>
                 </form>
             </motion.div>
         </div>
-    )
-}
-
-const DiscoveryCard = ({ id, title, description, category, author, media_urls, created_at, syncs, index, onSync, isBookmarked, onBookmark }) => {
-    const icons = [Cpu, Code, Globe, Layout, Layers, Database]
-    const Icon = icons[index % 6]
-
-    return (
-        <motion.div
-            className="sculpted-card p-0 flex flex-col group h-full"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-        >
-            {/* Image/Visual Placeholder */}
-            <div className="aspect-video bg-raisin relative overflow-hidden flex items-center justify-center border-b border-white/5">
-                {media_urls?.[0] ? (
-                    <img src={media_urls[0]} alt={title} className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity" />
-                ) : (
-                    <Icon size={80} className="text-lavender/20 group-hover:text-lavender/40 transition-colors duration-500 scale-100 group-hover:scale-110" />
-                )}
-                <div className="absolute top-4 right-4 px-3 py-1 bg-lavender/20 backdrop-blur-md rounded-lg flex items-center space-x-2 border border-lavender/20">
-                    <div className="w-1.5 h-1.5 rounded-full bg-lavender animate-pulse"></div>
-                    <span className="text-[10px] font-black text-lavender tracking-[0.2em] uppercase">ACTIVE</span>
-                </div>
-            </div>
-
-            <div className="p-8 flex-1 flex flex-col">
-                <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-8 h-8 rounded-lg bg-lavender/10 flex items-center justify-center text-lavender border border-lavender/20 overflow-hidden">
-                        {author?.profile_photo_url ? (
-                            <img src={author.profile_photo_url} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                            <User size={16} />
-                        )}
-                    </div>
-                    <div>
-                        <p className="text-xs font-bold text-platinum">{author?.full_name || 'Anonymous'}</p>
-                        <p className="text-[9px] text-lavender font-black uppercase tracking-widest">{author?.department || 'SECURE'} • Year {author?.year || 'X'}</p>
-                    </div>
-                </div>
-
-                <h3 className="text-2xl font-black font-outfit uppercase tracking-tighter mb-4 leading-none group-hover:text-lavender transition-colors">
-                    {title}
-                </h3>
-
-                <p className="text-sm text-platinum/50 font-medium leading-relaxed mb-10 flex-1 line-clamp-3">
-                    {description}
-                </p>
-
-                <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-auto">
-                    <div className="flex items-center space-x-6">
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onSync();
-                            }}
-                            className="flex items-center text-platinum/40 text-xs font-bold hover:text-lavender transition-colors"
-                        >
-                            <Zap size={14} className="mr-2" /> {syncs || 0} Syncs
-                        </button>
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onBookmark();
-                            }}
-                            className={`flex items-center text-xs font-bold transition-colors ${isBookmarked ? 'text-lavender' : 'text-platinum/40 hover:text-lavender'}`}
-                        >
-                            <Bookmark size={14} className="mr-2" fill={isBookmarked ? "currentColor" : "none"} /> {isBookmarked ? 'SAVED' : 'SAVE'}
-                        </button>
-                        <div className="flex items-center text-platinum/40 text-xs font-bold">
-                            <User size={14} className="mr-2" /> {author?.full_name || 'Innovator'}
-                        </div>
-                    </div>
-                    <button className="w-10 h-10 rounded-xl bg-raisin flex items-center justify-center text-lavender border border-white/5 hover:bg-lavender hover:text-white transition-all transform group-hover:rotate-12">
-                        <ChevronRight size={18} />
-                    </button>
-                </div>
-            </div>
-        </motion.div>
     )
 }
 

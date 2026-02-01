@@ -15,9 +15,9 @@ import Dashboard from './pages/Dashboard'
 import Discovery from './pages/Discovery'
 import Profile from './pages/Profile'
 import Community from './pages/Community'
-import Timeline from './pages/Timeline'
+import Events from './pages/Events'
 import Settings from './pages/Settings'
-import Leaderboard from './pages/Leaderboard'
+import StudentSearch from './pages/StudentSearch'
 
 // Guards
 const ProtectedRoute = ({ children }) => {
@@ -51,8 +51,8 @@ const App = () => {
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/discover" element={<ProtectedRoute><Discovery /></ProtectedRoute>} />
                 <Route path="/community" element={<ProtectedRoute><Community /></ProtectedRoute>} />
-                <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-                <Route path="/timeline" element={<ProtectedRoute><Timeline /></ProtectedRoute>} />
+                <Route path="/student-search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
+                <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
