@@ -30,7 +30,7 @@ const Dashboard = () => {
             </div>
 
             {/* Main Action Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <button
                     onClick={() => navigate('/discover?create=true')}
                     className="sculpted-card p-6 bg-lavender hover:bg-[#7D7AFF] border-none flex flex-col items-center justify-center text-center group transition-all"
@@ -51,17 +51,6 @@ const Dashboard = () => {
                     </div>
                     <h3 className="text-white font-bold text-lg">Find Projects</h3>
                     <p className="text-platinum/50 text-xs mt-1">Collaborate on existing ideas</p>
-                </button>
-
-                <button
-                    onClick={() => navigate('/users')}
-                    className="sculpted-card p-6 bg-[#2D2B3F] hover:bg-[#363448] flex flex-col items-center justify-center text-center group transition-all"
-                >
-                    <div className="w-12 h-12 bg-[#1E1D2B] rounded-full flex items-center justify-center mb-3 border border-white/5">
-                        <Users size={24} className="text-lavender" />
-                    </div>
-                    <h3 className="text-white font-bold text-lg">Student Directory</h3>
-                    <p className="text-platinum/50 text-xs mt-1">Connect with peers</p>
                 </button>
             </div>
 

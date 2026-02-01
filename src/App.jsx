@@ -18,7 +18,6 @@ import Community from './pages/Community'
 import Timeline from './pages/Timeline'
 import Settings from './pages/Settings'
 import Leaderboard from './pages/Leaderboard'
-import UserManagement from './pages/UserManagement'
 
 // Guards
 const ProtectedRoute = ({ children }) => {
@@ -56,7 +55,6 @@ const App = () => {
                 <Route path="/timeline" element={<ProtectedRoute><Timeline /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                <Route path="/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
 
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />

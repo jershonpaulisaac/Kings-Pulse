@@ -24,7 +24,6 @@ const AppLayout = ({ children }) => {
                     <NavItem to="/community" icon={MessageSquare} label="Community" active={location.pathname === '/community'} />
                     <NavItem to="/leaderboard" icon={Trophy} label="Leaderboard" active={location.pathname === '/leaderboard'} />
                     <NavItem to="/timeline" icon={Calendar} label="Timeline" active={location.pathname === '/timeline'} />
-                    <NavItem to="/users" icon={User} label="Student Directory" active={location.pathname === '/users'} />
                 </nav>
 
                 <div className="p-4 border-t border-white/5 space-y-1">
