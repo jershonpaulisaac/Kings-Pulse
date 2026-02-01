@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { User, Mail, Code, Camera, CheckCircle, TrendingUp, Edit3, Save, Loader2, FileText, Plus, X, UploadCloud, Trash2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useProfile, useUpdateProfile } from '../hooks/useProfile'
+import { supabase } from '../lib/supabase'
 
 const Profile = () => {
     const { user } = useAuth()
@@ -10,17 +11,24 @@ const Profile = () => {
     const updateProfile = useUpdateProfile()
     const [isEditing, setIsEditing] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
+    const [isUploading, setIsUploading] = useState(false)
 
     // Local State for Edit Mode
     const [skills, setSkills] = useState([])
     const [certificates, setCertificates] = useState([])
     const [newSkill, setNewSkill] = useState('')
+    const [profilePhoto, setProfilePhoto] = useState(null)
+
+    // File Input Refs
+    const photoInputRef = useRef(null)
+    const certInputRef = useRef(null)
 
     // Sync state when entering edit mode or when profile loads
     useEffect(() => {
         if (profile) {
             setSkills(profile.skills || [])
-            setCertificates(profile.certificates || []) // Assuming 'certificates' column exists or we store it in metadata
+            setCertificates(profile.certificates || [])
+            setProfilePhoto(profile.profile_photo_url)
         }
     }, [profile, isEditing])
 
@@ -35,14 +43,55 @@ const Profile = () => {
         setSkills(skills.filter(s => s !== skillToRemove))
     }
 
-    const handleAddCertificate = () => {
-        // Simulating File Upload by adding a placeholder "File" item
-        const newCert = {
-            name: "New Certificate.pdf",
-            date: new Date().toLocaleDateString(),
-            id: Date.now()
+    const uploadFile = async (file) => {
+        try {
+            const fileExt = file.name.split('.').pop()
+            const fileName = `${Math.random()}.${fileExt}`
+            const filePath = `${user.id}/${fileName}`
+
+            const { error: uploadError } = await supabase.storage
+                .from('uploads')
+                .upload(filePath, file)
+
+            if (uploadError) throw uploadError
+
+            const { data } = supabase.storage.from('uploads').getPublicUrl(filePath)
+            return data.publicUrl
+        } catch (error) {
+            console.error('Error uploading file:', error)
+            alert('Failed to upload file. Please try again.')
+            return null
         }
-        setCertificates([...certificates, newCert])
+    }
+
+    const handlePhotoChange = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        setIsUploading(true)
+        const publicUrl = await uploadFile(file)
+        if (publicUrl) {
+            setProfilePhoto(publicUrl)
+        }
+        setIsUploading(false)
+    }
+
+    const handleCertificateUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        setIsUploading(true)
+        const publicUrl = await uploadFile(file)
+        if (publicUrl) {
+            const newCert = {
+                name: file.name,
+                url: publicUrl,
+                date: new Date().toLocaleDateString(),
+                id: Date.now()
+            }
+            setCertificates([...certificates, newCert])
+        }
+        setIsUploading(false)
     }
 
     const handleRemoveCertificate = (id) => {
@@ -59,7 +108,8 @@ const Profile = () => {
             year: parseInt(formData.get('year')) || 1,
             email: formData.get('email'),
             skills: skills,
-            certificates: certificates // ensure Supabase has a JSONB column or similar for this
+            certificates: certificates,
+            profile_photo_url: profilePhoto
         }
 
         try {
@@ -88,12 +138,13 @@ const Profile = () => {
                     <div className="absolute top-8 right-8">
                         <button
                             type={isEditing ? "submit" : "button"}
+                            disabled={isUploading}
                             onClick={isEditing ? undefined : () => setIsEditing(true)}
                             className={`flex items-center space-x-3 px-6 py-3 text-xs font-black tracking-widest transition-all ${isEditing ? 'bg-lavender text-white shadow-xl shadow-lavender/30' : 'bg-charcoal text-lavender hover:bg-lavender/10'
                                 }`}
                             style={{ clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}
                         >
-                            {updateProfile.isLoading ? <Loader2 size={16} className="animate-spin" /> : (isEditing ? <><Save size={16} /> <span>SAVE PROFILE</span></> : <><Edit3 size={16} /> <span>EDIT PROFILE</span></>)}
+                            {updateProfile.isLoading || isUploading ? <Loader2 size={16} className="animate-spin" /> : (isEditing ? <><Save size={16} /> <span>SAVE PROFILE</span></> : <><Edit3 size={16} /> <span>EDIT PROFILE</span></>)}
                         </button>
                     </div>
                 </div>
@@ -101,15 +152,25 @@ const Profile = () => {
                 {/* Profile Header Block */}
                 <div className="px-12 pb-12 -mt-20 relative z-10 flex flex-col md:flex-row items-end gap-10">
                     <div className="w-44 h-44 bg-charcoal border-8 border-raisin sculpted-card !p-0 flex items-center justify-center overflow-hidden group relative">
-                        {profile?.profile_photo_url ? (
-                            <img src={profile.profile_photo_url} alt="" className="w-full h-full object-cover" />
+                        {profilePhoto ? (
+                            <img src={profilePhoto} alt="" className="w-full h-full object-cover" />
                         ) : (
                             <User size={80} className="text-lavender" />
                         )}
                         {isEditing && (
-                            <div className="absolute inset-0 bg-lavender/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+                            <div
+                                onClick={() => photoInputRef.current?.click()}
+                                className="absolute inset-0 bg-lavender/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer"
+                            >
                                 <Camera className="text-white" size={32} />
                                 <span className="absolute bottom-2 text-[10px] font-bold text-white">CHANGE</span>
+                                <input
+                                    ref={photoInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={handlePhotoChange}
+                                />
                             </div>
                         )}
                     </div>
@@ -207,29 +268,46 @@ const Profile = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Certificate List */}
                             {(isEditing ? certificates : profile?.certificates)?.map((cert, index) => (
-                                <div key={cert.id || index} className="p-6 bg-[#2D2B3F] border border-white/5 rounded-xl group relative hover:border-lavender/30 transition-colors">
+                                <a
+                                    key={cert.id || index}
+                                    href={cert.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-6 bg-[#2D2B3F] border border-white/5 rounded-xl group relative hover:border-lavender/30 transition-colors block"
+                                >
                                     <FileText className="text-lavender mb-4" size={32} />
-                                    <h4 className="text-white font-bold">{cert.name || 'Certificate'}</h4>
+                                    <h4 className="text-white font-bold truncate">{cert.name || 'Certificate'}</h4>
                                     <p className="text-xs text-platinum/50 mt-1">Added: {cert.date || 'Unknown'}</p>
                                     {isEditing && (
                                         <button
                                             type="button"
-                                            onClick={() => handleRemoveCertificate(cert.id)}
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                e.stopPropagation()
+                                                handleRemoveCertificate(cert.id)
+                                            }}
                                             className="absolute top-4 right-4 text-rose-400 opacity-100 hover:text-rose-300 p-2 bg-black/20 rounded-lg"
                                         >
                                             <Trash2 size={16} />
                                         </button>
                                     )}
-                                </div>
+                                </a>
                             ))}
 
                             {isEditing && (
                                 <div
-                                    onClick={handleAddCertificate}
+                                    onClick={() => certInputRef.current?.click()}
                                     className="p-6 bg-transparent border border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/5 transition-colors min-h-[140px]"
                                 >
-                                    <UploadCloud className="text-platinum/40 mb-3" size={32} />
-                                    <span className="text-xs font-bold text-platinum/60">Upload Certificate (Simulated)</span>
+                                    {isUploading ? <Loader2 className="animate-spin text-lavender mb-3" size={32} /> : <UploadCloud className="text-platinum/40 mb-3" size={32} />}
+                                    <span className="text-xs font-bold text-platinum/60">{isUploading ? 'Uploading...' : 'Upload Certificate'}</span>
+                                    <input
+                                        ref={certInputRef}
+                                        type="file"
+                                        accept=".pdf,.png,.jpg"
+                                        className="hidden"
+                                        onChange={handleCertificateUpload}
+                                    />
                                 </div>
                             )}
 
