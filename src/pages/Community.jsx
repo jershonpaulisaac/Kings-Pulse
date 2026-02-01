@@ -46,7 +46,7 @@ const Community = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <div className="lg:col-span-8 space-y-6">
+                <div className="lg:col-span-12 space-y-6">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <Loader2 className="text-lavender animate-spin" size={48} />
@@ -122,36 +122,6 @@ const Community = () => {
                         </div>
                     )}
                 </div>
-
-                <aside className="lg:col-span-4 space-y-8">
-                    <div className="glass-panel p-10 rounded-[40px] bg-charcoal/30 border border-white/5">
-                        <div className="flex items-center space-x-4 mb-8">
-                            <Info className="text-lavender" />
-                            <h3 className="font-black font-outfit text-xl text-white">PROTOCOL TIPS</h3>
-                        </div>
-                        <p className="text-sm font-medium text-platinum/50 leading-relaxed mb-8">
-                            Helpful signals earn you **Growth Pulse Points**. Verified innovators receive priority bandwidth in the SIH network.
-                        </p>
-                        <div className="p-6 bg-raisin/50 rounded-3xl border border-white/5 space-y-4">
-                            <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest">
-                                <span>Topic of the Day</span>
-                                <span className="text-lavender">#EdgeAI</span>
-                            </div>
-                            <div className="w-full h-1 bg-lavender/20 rounded-full">
-                                <div className="w-3/4 h-full bg-lavender"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="sculpted-card p-10 bg-lavender !rounded-none text-white relative overflow-hidden group">
-                        <div className="relative z-10">
-                            <h3 className="text-3xl font-black font-outfit leading-none mb-4">REPUTATION<br />BOOST</h3>
-                            <p className="text-sm font-bold opacity-80 mb-8">Solve a technical protocol today.</p>
-                            <button className="bg-raisin px-6 py-3 text-[10px] font-black tracking-widest uppercase">Go to Challenges</button>
-                        </div>
-                        <MessageSquare size={150} className="absolute -bottom-10 -right-10 text-white/10 group-hover:rotate-12 transition-transform duration-700" />
-                    </div>
-                </aside>
             </div>
             <div className="h-20"></div>
             {/* Create Post Modal */}
