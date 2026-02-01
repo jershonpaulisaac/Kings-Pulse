@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, Mail, Code, Camera, CheckCircle, TrendingUp, Edit3, Save, Loader2 } from 'lucide-react'
+import { User, Mail, Code, Camera, CheckCircle, TrendingUp, Edit3, Save, Loader2, FileText, Plus, X, UploadCloud } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useProfile, useUpdateProfile } from '../hooks/useProfile'
 
@@ -27,7 +27,7 @@ const Profile = () => {
             setShowSuccess(true)
             setTimeout(() => setShowSuccess(false), 2000)
         } catch (error) {
-            console.error('Identity sync failed:', error)
+            console.error('Save failed:', error)
         }
     }
 
@@ -35,7 +35,6 @@ const Profile = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
                 <Loader2 className="text-lavender animate-spin" size={48} />
-                <p className="text-lavender font-black tracking-widest uppercase text-xs">Accessing Identity Matrix...</p>
             </div>
         )
     }
@@ -53,7 +52,7 @@ const Profile = () => {
                                 }`}
                             style={{ clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}
                         >
-                            {updateProfile.isLoading ? <Loader2 size={16} className="animate-spin" /> : (isEditing ? <><Save size={16} /> <span>SAVE PROTOCOL</span></> : <><Edit3 size={16} /> <span>EDIT IDENTITY</span></>)}
+                            {updateProfile.isLoading ? <Loader2 size={16} className="animate-spin" /> : (isEditing ? <><Save size={16} /> <span>SAVE PROFILE</span></> : <><Edit3 size={16} /> <span>EDIT PROFILE</span></>)}
                         </button>
                     </div>
                 </div>
@@ -89,9 +88,8 @@ const Profile = () => {
                                     className="bg-transparent border-b border-lavender/30 focus:outline-none focus:border-lavender text-lavender font-bold tracking-[0.1em] text-sm uppercase"
                                 />
                             ) : (
-                                <span className="flex items-center"><Code size={16} className="mr-2" /> {profile?.department || 'Sector Unknown'}</span>
+                                <span className="flex items-center"><Code size={16} className="mr-2" /> {profile?.department || 'Department Unknown'}</span>
                             )}
-                            <span className="flex items-center"><TrendingUp size={16} className="mr-2" /> {profile?.points?.toLocaleString() || '0'} Credits</span>
                         </div>
                     </div>
                 </div>
@@ -99,26 +97,26 @@ const Profile = () => {
                 {showSuccess && (
                     <motion.div
                         className="absolute top-10 left-1/2 -translate-x-1/2 bg-platinum text-raisin px-8 py-4 flex items-center space-x-4 z-50 shadow-2xl"
-                        style={{ clipPath: 'polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px)' }}
                         initial={{ opacity: 0, scale: 0.9, y: -20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: -20 }}
                     >
                         <CheckCircle className="text-lavender" />
-                        <span className="text-xs font-black tracking-widest">IDENTITY SYNC COMPLETE</span>
+                        <span className="text-xs font-black tracking-widest">SAVED SUCCESSFULLY</span>
                     </motion.div>
                 )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div className="lg:col-span-8 space-y-12">
-                    <Section label="Parameters">
+                    <Section label="Academic Details">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <InfoField name="email" label="Secure Email" value={profile?.email || 'N/A'} isEditing={isEditing} icon={Mail} />
-                            <InfoField name="year" label="Academic Year (Level)" value={`${profile?.year || 'X'}`} isEditing={isEditing} icon={CheckCircle} />
+                            <InfoField name="email" label="Contact Email" value={profile?.email || 'N/A'} isEditing={isEditing} icon={Mail} />
+                            <InfoField name="year" label="Year of Study" value={`${profile?.year || '1'}`} isEditing={isEditing} icon={CheckCircle} />
                         </div>
                     </Section>
-                    <Section label="Capabilities">
+
+                    <Section label="Skills & Expertise">
                         <div className="flex flex-wrap gap-4">
                             {(profile?.skills && profile.skills.length > 0) ? (
                                 profile.skills.map(skill => (
@@ -127,28 +125,39 @@ const Profile = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-lavender/40 text-sm font-bold italic">No specialized protocols detected.</p>
+                                <p className="text-lavender/40 text-sm font-bold italic">No skills added yet.</p>
                             )}
                             {isEditing && (
-                                <button type="button" className="px-6 py-3 bg-lavender/10 border border-lavender/20 text-lavender rounded-xl text-xs font-black tracking-widest hover:bg-lavender hover:text-white transition-all">
-                                    + ADD CAPABILITY
+                                <button type="button" className="px-6 py-3 bg-lavender/10 border border-lavender/20 text-lavender rounded-xl text-xs font-black tracking-widest hover:bg-lavender hover:text-white transition-all flex items-center">
+                                    <Plus size={14} className="mr-2" /> ADD SKILL
                                 </button>
                             )}
                         </div>
                     </Section>
-                </div>
-                <aside className="lg:col-span-4 space-y-12">
-                    <div className="glass-panel p-10 rounded-[40px] text-center bg-charcoal/30 border border-white/5">
-                        <h3 className="font-black font-outfit text-xl mb-6 uppercase tracking-tight text-white">IDENTITY STRENGTH</h3>
-                        <div className="relative inline-flex items-center justify-center">
-                            <svg className="w-40 h-40">
-                                <circle className="text-white/5" strokeWidth="12" stroke="currentColor" fill="transparent" r="70" cx="80" cy="80" />
-                                <circle className="text-lavender shadow-lg" strokeWidth="12" strokeDasharray={440} strokeDashoffset={440 * (1 - 0.8)} strokeLinecap="round" stroke="currentColor" fill="transparent" r="70" cx="80" cy="80" />
-                            </svg>
-                            <div className="absolute text-4xl font-black text-lavender font-outfit">80%</div>
+
+                    <Section label="Certificates & Documents">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Mock Certificates for UI demo */}
+                            <div className="p-6 bg-[#2D2B3F] border border-white/5 rounded-xl group relative">
+                                <FileText className="text-lavender mb-4" size={32} />
+                                <h4 className="text-white font-bold">AWS Certified Cloud Practitioner</h4>
+                                <p className="text-xs text-platinum/50 mt-1">Uploaded 2 months ago</p>
+                                {isEditing && (
+                                    <button type="button" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <X size={16} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {isEditing && (
+                                <div className="p-6 bg-transparent border border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/5 transition-colors min-h-[140px]">
+                                    <UploadCloud className="text-platinum/40 mb-3" size={32} />
+                                    <span className="text-xs font-bold text-platinum/60">Upload Certificate (PDF)</span>
+                                </div>
+                            )}
                         </div>
-                    </div>
-                </aside>
+                    </Section>
+                </div>
             </div>
             <div className="h-20"></div>
         </form>
@@ -156,20 +165,20 @@ const Profile = () => {
 }
 
 const Section = ({ label, children }) => (
-    <div className="space-y-8">
-        <h3 className="text-sm font-black tracking-[0.5em] text-lavender uppercase">{label}</h3>
+    <div className="space-y-6">
+        <h3 className="text-sm font-black tracking-[0.2em] text-lavender uppercase border-l-4 border-lavender pl-4">{label}</h3>
         {children}
     </div>
 )
 
 const InfoField = ({ name, label, value, isEditing, icon: Icon }) => (
-    <div className="space-y-3">
-        <div className="flex items-center space-x-3 text-lavender/40">
+    <div className="space-y-2">
+        <div className="flex items-center space-x-2 text-lavender/40">
             <Icon size={14} />
             <label className="text-[10px] font-black uppercase tracking-widest">{label}</label>
         </div>
         {isEditing ? (
-            <input name={name} type="text" defaultValue={value} className="sculpted-input !bg-charcoal/50 border-white/5 w-full" />
+            <input name={name} type="text" defaultValue={value} className="bg-[#1E1D2B] border border-white/10 rounded-lg px-4 py-3 text-white w-full focus:outline-none focus:border-lavender" />
         ) : (
             <p className="text-lg font-bold text-platinum/80">{value}</p>
         )}

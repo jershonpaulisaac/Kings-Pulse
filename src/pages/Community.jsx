@@ -85,8 +85,8 @@ const Community = () => {
                                 <div className="flex-1 space-y-3">
                                     <div className="flex items-center gap-3">
                                         <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded border ${post.category === 'LOOKING FOR TEAM'
-                                                ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                                                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                            ? 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                                             }`}>
                                             {post.category || 'GENERAL'}
                                         </span>
@@ -209,6 +209,20 @@ const CreatePostModal = ({ onClose, onSubmit, isLoading }) => {
                             placeholder="Describe your project, the skills you need, or what you've built..."
                             className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 focus:outline-none focus:border-lavender/50 resize-none text-white placeholder:text-platinum/20"
                         />
+                    </div>
+
+                    {/* File Attachment (New) */}
+                    <div className="border border-dashed border-white/10 rounded-xl p-4 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-[#2D2B3F] rounded-lg flex items-center justify-center text-lavender group-hover:scale-110 transition-transform">
+                                <Plus size={20} />
+                            </div>
+                            <div>
+                                <p className="text-sm font-bold text-white">Attach File</p>
+                                <p className="text-xs text-platinum/40">Image or PDF (Max 5MB)</p>
+                            </div>
+                        </div>
+                        <input type="file" accept="image/*,.pdf" className="hidden" />
                     </div>
 
                     <button

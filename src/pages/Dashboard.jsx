@@ -25,12 +25,31 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2">
                 <div>
                     <h2 className="text-3xl font-bold text-white tracking-tight">Dashboard</h2>
-                    <p className="text-platinum/60 text-sm mt-1">Welcome back, {profile?.full_name?.split(' ')[0] || 'Student'}.</p>
+                    <p className="text-platinum/60 text-sm mt-1">Welcome back, <span className="text-lavender">{profile?.full_name?.split(' ')[0] || 'Scholar'}</span>.</p>
+                </div>
+
+                {/* Creative Search Shortcut */}
+                <div className="relative w-full md:w-96 group">
+                    <div className="absolute inset-0 bg-lavender/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
+                    <div className="relative bg-[#1E1D2B] border border-white/10 rounded-full flex items-center px-6 py-3 shadow-xl">
+                        <Users size={18} className="text-lavender mr-3" />
+                        <input
+                            type="text"
+                            placeholder="Find a student (e.g. 'Java Developer')"
+                            className="bg-transparent border-none focus:outline-none text-white text-sm w-full placeholder:text-platinum/30"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    navigate(`/student-search?q=${e.target.value}`)
+                                }
+                            }}
+                        />
+                        <div className="hidden group-hover:block absolute right-4 text-[10px] font-bold text-lavender bg-lavender/10 px-2 py-1 rounded">PRESS ENTER</div>
+                    </div>
                 </div>
             </div>
 
             {/* Main Action Buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <button
                     onClick={() => navigate('/discover?create=true')}
                     className="sculpted-card p-6 bg-lavender hover:bg-[#7D7AFF] border-none flex flex-col items-center justify-center text-center group transition-all"
@@ -51,6 +70,17 @@ const Dashboard = () => {
                     </div>
                     <h3 className="text-white font-bold text-lg">Find Projects</h3>
                     <p className="text-platinum/50 text-xs mt-1">Collaborate on existing ideas</p>
+                </button>
+
+                <button
+                    onClick={() => navigate('/student-search')}
+                    className="sculpted-card p-6 bg-[#2D2B3F] hover:bg-[#363448] flex flex-col items-center justify-center text-center group transition-all"
+                >
+                    <div className="w-12 h-12 bg-[#1E1D2B] rounded-full flex items-center justify-center mb-3 border border-white/5">
+                        <Users size={24} className="text-lavender" />
+                    </div>
+                    <h3 className="text-white font-bold text-lg">Student Search</h3>
+                    <p className="text-platinum/50 text-xs mt-1">Find peers by skill</p>
                 </button>
             </div>
 

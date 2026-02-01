@@ -24,7 +24,7 @@ const StudentSearch = () => {
         return matchesSearch && matchesDept;
     }) || []
 
-    const departments = ['ALL', 'CSE', 'ECE', 'MECH', 'CIVIL', 'EEE', 'IT', 'AI&DS']
+    const departments = ['ALL', 'CSE', 'ECE', 'MECH', 'CIVIL', 'EEE', 'IT', 'AI&DS', 'Cybersecurity', 'Cloud Computing']
 
     return (
         <div className="max-w-7xl mx-auto space-y-8">
@@ -46,16 +46,19 @@ const StudentSearch = () => {
                         className="w-full bg-[#1E1D2B] border border-white/5 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-lavender/50 placeholder:text-platinum/20"
                     />
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-                    {departments.map(dept => (
-                        <button
-                            key={dept}
-                            onClick={() => setFilterDept(dept)}
-                            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${filterDept === dept ? 'bg-lavender text-white' : 'bg-[#1E1D2B] text-platinum/50 hover:bg-white/10'}`}
-                        >
-                            {dept}
-                        </button>
-                    ))}
+
+                {/* Dept Dropdown */}
+                <div className="relative min-w-[180px]">
+                    <select
+                        value={filterDept}
+                        onChange={(e) => setFilterDept(e.target.value)}
+                        className="w-full appearance-none bg-[#1E1D2B] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-lavender/50 cursor-pointer font-bold text-sm"
+                    >
+                        {departments.map(dept => (
+                            <option key={dept} value={dept}>{dept}</option>
+                        ))}
+                    </select>
+                    <Filter size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-platinum/40 pointer-events-none" />
                 </div>
             </div>
 

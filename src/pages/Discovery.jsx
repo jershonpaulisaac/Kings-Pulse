@@ -15,7 +15,7 @@ const Discovery = () => {
     const [filterCategory, setFilterCategory] = useState('ALL')
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(searchParams.get('create') === 'true')
 
-    const categories = ['ALL', 'Web Dev', 'AI/ML', 'IoT', 'Mobile App', 'Blockchain', 'Design']
+    const categories = ['ALL', 'Web Dev', 'AI/ML', 'IoT', 'Mobile App', 'Blockchain', 'Cybersecurity', 'Cloud Computing', 'Data Science', 'Design']
 
     const filteredProjects = projects?.filter(p => {
         const matchesSearch = p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,16 +51,19 @@ const Discovery = () => {
                         className="w-full bg-[#2D2B3F] border border-white/5 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-lavender/50 placeholder:text-platinum/20"
                     />
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setFilterCategory(cat)}
-                            className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${filterCategory === cat ? 'bg-lavender text-white' : 'bg-[#2D2B3F] text-platinum/50 hover:bg-white/10'}`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
+
+                {/* Category Dropdown */}
+                <div className="relative min-w-[200px]">
+                    <select
+                        value={filterCategory}
+                        onChange={(e) => setFilterCategory(e.target.value)}
+                        className="w-full appearance-none bg-[#2D2B3F] border border-white/5 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-lavender/50 cursor-pointer font-bold text-sm"
+                    >
+                        {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
+                    <Filter size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-platinum/40 pointer-events-none" />
                 </div>
             </div>
 

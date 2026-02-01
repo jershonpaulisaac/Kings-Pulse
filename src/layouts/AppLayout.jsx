@@ -44,17 +44,32 @@ const AppLayout = ({ children }) => {
                 {/* Topbar (Dark Mode) */}
                 <header className="h-20 bg-[#1E1D2B]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-10 px-8 flex items-center justify-between">
                     <div className="flex-1 max-w-xl">
-                        <p className="text-sm font-bold text-platinum/40">Welcome back, {user?.email?.split('@')[0] || 'Scholar'}</p>
+                        <p className="text-sm font-bold text-platinum/40">Welcome back, <span className="text-white">Scholar</span></p>
                     </div>
 
                     <div className="flex items-center space-x-6">
-                        <button className="relative text-platinum/40 hover:text-white transition-colors p-2">
-                            <Bell size={20} />
-                            <span className="absolute top-2 right-2 w-2 h-2 bg-lavender rounded-full border border-[#1E1D2B]"></span>
-                        </button>
-                        <div className="w-10 h-10 bg-lavender/10 text-lavender rounded-xl flex items-center justify-center font-bold text-xs border border-lavender/20">
-                            {user?.email?.[0]?.toUpperCase() || 'U'}
+                        <div className="relative group">
+                            <button className="text-platinum/40 hover:text-white transition-colors p-2">
+                                <Bell size={20} />
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-lavender rounded-full border border-[#1E1D2B]"></span>
+                            </button>
+                            {/* Simple Hover Dropdown for Notifications */}
+                            <div className="absolute right-0 top-full mt-2 w-64 bg-[#2D2B3F] border border-white/5 rounded-xl shadow-2xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform origin-top-right">
+                                <h4 className="text-xs font-bold text-white mb-2 uppercase tracking-wider">Notifications</h4>
+                                <div className="space-y-2">
+                                    <div className="text-xs text-platinum/60 hover:text-white cursor-pointer p-2 rounded hover:bg-white/5">
+                                        🚀 New Hackathon listed in Events
+                                    </div>
+                                    <div className="text-xs text-platinum/60 hover:text-white cursor-pointer p-2 rounded hover:bg-white/5">
+                                        👋 Sarah commented on your post
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <Link to="/profile" className="w-10 h-10 bg-lavender/10 text-lavender rounded-xl flex items-center justify-center font-bold text-xs border border-lavender/20 hover:bg-lavender hover:text-white transition-all cursor-pointer">
+                            {user?.email?.[0]?.toUpperCase() || 'U'}
+                        </Link>
                     </div>
                 </header>
 
