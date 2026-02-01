@@ -17,7 +17,7 @@ const LandingPage = () => {
                 <div className="flex items-center space-x-2">
                     <h1 className="text-xl md:text-3xl font-black font-outfit tracking-tighter whitespace-nowrap">KINGS <span className="text-lavender">PULSE</span></h1>
                 </div>
-                <Link to="/dashboard" className="sculpted-button !px-4 md:!px-8 !py-3 !text-[10px] md:!text-xs tracking-[0.2em] whitespace-nowrap">ACCESS PORTAL</Link>
+                <Link to="/dashboard" className="sculpted-button bg-lavender text-white hover:bg-[#7D7AFF] shadow-lg hover:shadow-lavender/50 !px-4 md:!px-8 !py-3 !text-[10px] md:!text-xs tracking-[0.2em] whitespace-nowrap transition-all">ACCESS PORTAL</Link>
             </nav>
 
             <main className="relative z-10 px-8 md:px-16 pt-20">
@@ -46,7 +46,7 @@ const LandingPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
-                            <Link to="/login" className="sculpted-button group flex items-center !text-lg !px-10 !py-5">
+                            <Link to="/login" className="sculpted-button bg-lavender text-white hover:bg-[#7D7AFF] shadow-lg hover:shadow-lavender/50 group flex items-center !text-lg !px-10 !py-5 transition-all">
                                 GET STARTED <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
                             </Link>
                         </motion.div>
