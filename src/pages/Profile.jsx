@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { User, Mail, Code, Camera, CheckCircle, TrendingUp, Edit3, Save, Loader2, FileText, Plus, X, UploadCloud } from 'lucide-react'
+import { User, Mail, Code, Camera, CheckCircle, TrendingUp, Edit3, Save, Loader2, FileText, Plus, X, UploadCloud, Trash2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useProfile, useUpdateProfile } from '../hooks/useProfile'
 
@@ -11,14 +11,55 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
 
+    // Local State for Edit Mode
+    const [skills, setSkills] = useState([])
+    const [certificates, setCertificates] = useState([])
+    const [newSkill, setNewSkill] = useState('')
+
+    // Sync state when entering edit mode or when profile loads
+    useEffect(() => {
+        if (profile) {
+            setSkills(profile.skills || [])
+            setCertificates(profile.certificates || []) // Assuming 'certificates' column exists or we store it in metadata
+        }
+    }, [profile, isEditing])
+
+    const handleAddSkill = () => {
+        if (newSkill && !skills.includes(newSkill)) {
+            setSkills([...skills, newSkill])
+            setNewSkill('')
+        }
+    }
+
+    const handleRemoveSkill = (skillToRemove) => {
+        setSkills(skills.filter(s => s !== skillToRemove))
+    }
+
+    const handleAddCertificate = () => {
+        // Simulating File Upload by adding a placeholder "File" item
+        const newCert = {
+            name: "New Certificate.pdf",
+            date: new Date().toLocaleDateString(),
+            id: Date.now()
+        }
+        setCertificates([...certificates, newCert])
+    }
+
+    const handleRemoveCertificate = (id) => {
+        setCertificates(certificates.filter(c => c.id !== id))
+    }
+
     const handleSave = async (e) => {
         e.preventDefault()
         const formData = new FormData(e.target)
+
         const updates = {
             full_name: formData.get('fullName'),
             department: formData.get('department'),
             year: parseInt(formData.get('year')) || 1,
             email: formData.get('email'),
+            skills: skills,
+            certificates: certificates // ensure Supabase has a JSONB column or similar for this
         }
 
         try {
@@ -57,6 +98,7 @@ const Profile = () => {
                     </div>
                 </div>
 
+                {/* Profile Header Block */}
                 <div className="px-12 pb-12 -mt-20 relative z-10 flex flex-col md:flex-row items-end gap-10">
                     <div className="w-44 h-44 bg-charcoal border-8 border-raisin sculpted-card !p-0 flex items-center justify-center overflow-hidden group relative">
                         {profile?.profile_photo_url ? (
@@ -67,6 +109,7 @@ const Profile = () => {
                         {isEditing && (
                             <div className="absolute inset-0 bg-lavender/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
                                 <Camera className="text-white" size={32} />
+                                <span className="absolute bottom-2 text-[10px] font-bold text-white">CHANGE</span>
                             </div>
                         )}
                     </div>
@@ -75,7 +118,7 @@ const Profile = () => {
                             <input
                                 name="fullName"
                                 defaultValue={profile?.full_name}
-                                className="text-5xl font-black font-outfit uppercase tracking-tighter mb-2 bg-transparent border-b border-lavender/30 focus:outline-none focus:border-lavender w-full"
+                                className="text-5xl font-black font-outfit uppercase tracking-tighter mb-2 bg-transparent border-b border-lavender/30 focus:outline-none focus:border-lavender w-full text-white"
                             />
                         ) : (
                             <h2 className="text-5xl font-black font-outfit uppercase tracking-tighter mb-2 text-white">{profile?.full_name || 'Anonymous User'}</h2>
@@ -85,6 +128,7 @@ const Profile = () => {
                                 <input
                                     name="department"
                                     defaultValue={profile?.department}
+                                    placeholder="DEPARTMENT"
                                     className="bg-transparent border-b border-lavender/30 focus:outline-none focus:border-lavender text-lavender font-bold tracking-[0.1em] text-sm uppercase"
                                 />
                             ) : (
@@ -117,43 +161,80 @@ const Profile = () => {
                     </Section>
 
                     <Section label="Skills & Expertise">
-                        <div className="flex flex-wrap gap-4">
-                            {(profile?.skills && profile.skills.length > 0) ? (
-                                profile.skills.map(skill => (
-                                    <div key={skill} className="px-6 py-3 bg-charcoal border border-white/5 sculpted-card !p-0">
-                                        <span className="px-6 py-3 block text-sm font-bold tracking-tight uppercase">{skill}</span>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-lavender/40 text-sm font-bold italic">No skills added yet.</p>
-                            )}
+                        <div className="flex flex-wrap gap-4 items-center">
+                            {/* Skill List */}
+                            {(isEditing ? skills : profile?.skills)?.map((skill, index) => (
+                                <div key={skill + index} className="px-6 py-3 bg-charcoal border border-white/5 sculpted-card !p-0 flex items-center gap-2 group">
+                                    <span className="text-sm font-bold tracking-tight uppercase text-platinum/80">{skill}</span>
+                                    {isEditing && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveSkill(skill)}
+                                            className="text-rose-400 opacity-50 group-hover:opacity-100 hover:text-rose-300"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+
                             {isEditing && (
-                                <button type="button" className="px-6 py-3 bg-lavender/10 border border-lavender/20 text-lavender rounded-xl text-xs font-black tracking-widest hover:bg-lavender hover:text-white transition-all flex items-center">
-                                    <Plus size={14} className="mr-2" /> ADD SKILL
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        value={newSkill}
+                                        onChange={(e) => setNewSkill(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddSkill())}
+                                        placeholder="Type skill..."
+                                        className="px-4 py-3 bg-lavender/5 border border-lavender/20 rounded-xl text-sm text-white focus:outline-none focus:border-lavender w-32"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleAddSkill}
+                                        className="p-3 bg-lavender/10 border border-lavender/20 text-lavender rounded-xl hover:bg-lavender hover:text-white transition-all"
+                                    >
+                                        <Plus size={14} />
+                                    </button>
+                                </div>
+                            )}
+
+                            {(!profile?.skills?.length && !isEditing) && (
+                                <p className="text-lavender/40 text-sm font-bold italic">No skills added yet.</p>
                             )}
                         </div>
                     </Section>
 
                     <Section label="Certificates & Documents">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Mock Certificates for UI demo */}
-                            <div className="p-6 bg-[#2D2B3F] border border-white/5 rounded-xl group relative">
-                                <FileText className="text-lavender mb-4" size={32} />
-                                <h4 className="text-white font-bold">AWS Certified Cloud Practitioner</h4>
-                                <p className="text-xs text-platinum/50 mt-1">Uploaded 2 months ago</p>
-                                {isEditing && (
-                                    <button type="button" className="absolute top-4 right-4 text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <X size={16} />
-                                    </button>
-                                )}
-                            </div>
+                            {/* Certificate List */}
+                            {(isEditing ? certificates : profile?.certificates)?.map((cert, index) => (
+                                <div key={cert.id || index} className="p-6 bg-[#2D2B3F] border border-white/5 rounded-xl group relative hover:border-lavender/30 transition-colors">
+                                    <FileText className="text-lavender mb-4" size={32} />
+                                    <h4 className="text-white font-bold">{cert.name || 'Certificate'}</h4>
+                                    <p className="text-xs text-platinum/50 mt-1">Added: {cert.date || 'Unknown'}</p>
+                                    {isEditing && (
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveCertificate(cert.id)}
+                                            className="absolute top-4 right-4 text-rose-400 opacity-100 hover:text-rose-300 p-2 bg-black/20 rounded-lg"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
 
                             {isEditing && (
-                                <div className="p-6 bg-transparent border border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/5 transition-colors min-h-[140px]">
+                                <div
+                                    onClick={handleAddCertificate}
+                                    className="p-6 bg-transparent border border-dashed border-white/20 rounded-xl flex flex-col items-center justify-center text-center cursor-pointer hover:bg-white/5 transition-colors min-h-[140px]"
+                                >
                                     <UploadCloud className="text-platinum/40 mb-3" size={32} />
-                                    <span className="text-xs font-bold text-platinum/60">Upload Certificate (PDF)</span>
+                                    <span className="text-xs font-bold text-platinum/60">Upload Certificate (Simulated)</span>
                                 </div>
+                            )}
+
+                            {(!profile?.certificates?.length && !isEditing) && (
+                                <p className="col-span-full text-lavender/40 text-sm font-bold italic">No certificates uploaded.</p>
                             )}
                         </div>
                     </Section>
