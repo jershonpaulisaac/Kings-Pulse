@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, MessageSquare, Calendar, User, Settings as SettingsIcon, LogOut, Bell, Trophy, Users } from 'lucide-react';
+import { Home, Search, MessageSquare, Calendar, User, HelpCircle, LogOut, Bell, Trophy, Users } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
 import { useAuth } from '../context/AuthContext';
 
@@ -30,7 +30,7 @@ const AppLayout = ({ children }) => {
 
                 <div className="p-4 border-t border-white/5 space-y-1">
                     <NavItem to="/profile" icon={User} label="My Profile" active={location.pathname === '/profile'} />
-                    <NavItem to="/settings" icon={SettingsIcon} label="Settings" active={location.pathname === '/settings'} />
+                    <NavItem to="/help" icon={HelpCircle} label="Help & Support" active={location.pathname === '/help'} />
                     <button
                         onClick={logout}
                         className="flex items-center w-full px-4 py-3 text-sm font-bold text-platinum/40 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-colors mt-4"

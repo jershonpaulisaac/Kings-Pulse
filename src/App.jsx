@@ -16,7 +16,7 @@ import Discovery from './pages/Discovery'
 import Profile from './pages/Profile'
 import Community from './pages/Community'
 import Events from './pages/Events'
-import Settings from './pages/Settings'
+import Help from './pages/Help'
 import StudentSearch from './pages/StudentSearch'
 
 // Guards
@@ -54,7 +54,7 @@ const App = () => {
                 <Route path="/student-search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
                 <Route path="/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                <Route path="/help" element={<ProtectedRoute><Help /></ProtectedRoute>} />
 
                 {/* Fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />
