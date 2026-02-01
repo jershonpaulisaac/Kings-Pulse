@@ -192,11 +192,6 @@ const LandingPage = () => {
 
             <footer className="relative z-10 p-20 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-platinum/30 text-[10px] font-black tracking-[0.5em] uppercase">
                 <p>&copy; 2026 KINGS ENGINEERING COLLEGE</p>
-                <div className="flex space-x-12 mt-10 md:mt-0">
-                    <a href="#" className="hover:text-lavender transition-colors">Twitter</a>
-                    <a href="#" className="hover:text-lavender transition-colors">Discord</a>
-                    <a href="#" className="hover:text-lavender transition-colors">GitHub</a>
-                </div>
             </footer>
         </div>
     )
