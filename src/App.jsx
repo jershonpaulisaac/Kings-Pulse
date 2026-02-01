@@ -43,7 +43,7 @@ const App = () => {
         <Router>
             <Routes>
                 {/* Public Routes (Dark Theme) */}
-                <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
                 <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 

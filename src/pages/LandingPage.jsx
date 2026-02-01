@@ -15,9 +15,9 @@ const LandingPage = () => {
             {/* Navigation */}
             <nav className="relative z-50 h-24 px-8 md:px-16 flex items-center justify-between backdrop-blur-md bg-raisin/50 sticky top-0 border-b border-white/5">
                 <div className="flex items-center space-x-2">
-                    <h1 className="text-3xl font-black font-outfit tracking-tighter">KINGS <span className="text-lavender">PULSE</span></h1>
+                    <h1 className="text-xl md:text-3xl font-black font-outfit tracking-tighter whitespace-nowrap">KINGS <span className="text-lavender">PULSE</span></h1>
                 </div>
-                <Link to="/login" className="sculpted-button !px-8 !text-xs tracking-[0.2em]">ACCESS PORTAL</Link>
+                <Link to="/dashboard" className="sculpted-button !px-4 md:!px-8 !py-3 !text-[10px] md:!text-xs tracking-[0.2em] whitespace-nowrap">ACCESS PORTAL</Link>
             </nav>
 
             <main className="relative z-10 px-8 md:px-16 pt-20">
