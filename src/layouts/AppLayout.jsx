@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, MessageSquare, Calendar, User, Settings as SettingsIcon, LogOut, Bell, Trophy, Users } from 'lucide-react';
 import { useProfile } from '../hooks/useProfile';
+import { useAuth } from '../context/AuthContext';
 
 const AppLayout = ({ children }) => {
     const location = useLocation();
