@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Search, MapPin, Code, Briefcase, Mail } from 'lucide-react'
+import { Search, MapPin, Code, Briefcase, Mail, Filter } from 'lucide-react'
 import { useQuery } from 'react-query'
 import { supabase } from '../lib/supabase'
 
