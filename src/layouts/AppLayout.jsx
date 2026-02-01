@@ -20,11 +20,11 @@ const AppLayout = ({ children }) => {
 
                 <nav className="flex-1 px-4 py-4 space-y-2">
                     <NavItem to="/dashboard" icon={Home} label="Dashboard" active={location.pathname === '/dashboard'} />
-                    <NavItem to="/discover" icon={Search} label="Discovery" active={location.pathname === '/discover'} />
+                    <NavItem to="/discover" icon={Search} label="Projects" active={location.pathname === '/discover'} />
                     <NavItem to="/community" icon={MessageSquare} label="Community" active={location.pathname === '/community'} />
                     <NavItem to="/leaderboard" icon={Trophy} label="Leaderboard" active={location.pathname === '/leaderboard'} />
                     <NavItem to="/timeline" icon={Calendar} label="Timeline" active={location.pathname === '/timeline'} />
-                    <NavItem to="/users" icon={User} label="Directory" active={location.pathname === '/users'} />
+                    <NavItem to="/users" icon={User} label="Student Directory" active={location.pathname === '/users'} />
                 </nav>
 
                 <div className="p-4 border-t border-white/5 space-y-1">
