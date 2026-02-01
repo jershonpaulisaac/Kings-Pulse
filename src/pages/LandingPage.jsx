@@ -12,7 +12,7 @@ const LandingPage = () => {
                 <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-lavender/5 rounded-full blur-[120px] animate-pulse [animation-delay:2s]"></div>
             </div>
 
-            {/* Navigation - Simplified to prevent glitches */}
+            {/* Navigation */}
             <nav className="relative z-50 h-24 px-8 md:px-16 flex items-center justify-between backdrop-blur-md bg-raisin/50 sticky top-0 border-b border-white/5">
                 <div className="flex items-center space-x-2">
                     <h1 className="text-3xl font-black font-outfit tracking-tighter">KINGS <span className="text-lavender">PULSE</span></h1>
@@ -31,12 +31,12 @@ const LandingPage = () => {
                         >
                             <h2 className="text-xs font-black tracking-[0.6em] text-lavender uppercase mb-6">Kings Engineering College</h2>
                             <h3 className="text-7xl md:text-9xl font-black font-outfit leading-[0.8] tracking-tighter mb-4">
-                                SECURE<br />
-                                <span className="text-lavender">PULSE</span><br />
-                                SYNC.
+                                BUILD.<br />
+                                <span className="text-lavender">CONNECT.</span><br />
+                                GROW.
                             </h3>
                             <p className="text-lg md:text-xl font-medium text-platinum/60 max-w-lg mt-10 leading-relaxed font-inter">
-                                The flagship collaboration protocol for KEC innovators. Share signals, discover talent, and synchronize your mission in high-fidelity.
+                                The official student project portal. Showcase your skills, find teammates, and collaborate on innovative projects within the campus network.
                             </p>
                         </motion.div>
 
@@ -47,7 +47,7 @@ const LandingPage = () => {
                             transition={{ duration: 0.8, delay: 0.4 }}
                         >
                             <Link to="/login" className="sculpted-button group flex items-center !text-lg !px-10 !py-5">
-                                IDENTITY SYNC <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
+                                GET STARTED <ArrowRight size={20} className="ml-3 group-hover:translate-x-2 transition-transform" />
                             </Link>
                         </motion.div>
                     </div>
@@ -67,7 +67,7 @@ const LandingPage = () => {
 
                             <div className="absolute inset-0 flex flex-col items-center justify-center p-20 z-30">
                                 <div className="w-full h-px bg-white/10 mb-8 self-start"></div>
-                                <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter leading-none mb-4 self-start">BUILD THE FUTURE.<br />START YOUR <span className="text-lavender">PULSE.</span></h4>
+                                <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter leading-none mb-4 self-start">YOUR IDEAS.<br />REAL <span className="text-lavender">IMPACT.</span></h4>
                                 <div className="w-24 h-2 bg-lavender self-start shadow-[0_0_20px_rgba(94,83,115,0.8)]"></div>
                             </div>
 
@@ -75,8 +75,8 @@ const LandingPage = () => {
                                 <div className="sculpted-card !bg-raisin/90 flex items-center space-x-4 px-6 py-4 border-lavender/30">
                                     <Target className="text-lavender" />
                                     <div>
-                                        <p className="text-[10px] font-black text-lavender tracking-widest uppercase">Innovation Pulse</p>
-                                        <p className="text-sm font-bold">JOIN THE MATRIX</p>
+                                        <p className="text-[10px] font-black text-lavender tracking-widest uppercase">Student Portal</p>
+                                        <p className="text-sm font-bold">JOIN THE HUB</p>
                                     </div>
                                 </div>
                             </div>
@@ -84,15 +84,15 @@ const LandingPage = () => {
                     </div>
                 </div>
 
-                {/* Pictorial Protocol Flow Diagram */}
+                {/* Flow Diagram */}
                 <section className="mt-60 mb-40">
                     <div className="text-center mb-24">
-                        <h2 className="text-sm font-black tracking-[0.8em] text-lavender uppercase mb-4">The KEC Protocol</h2>
-                        <h3 className="text-5xl font-black font-outfit tracking-tighter uppercase">Mission <span className="text-lavender">Workflow</span></h3>
+                        <h2 className="text-sm font-black tracking-[0.8em] text-lavender uppercase mb-4">How It Works</h2>
+                        <h3 className="text-5xl font-black font-outfit tracking-tighter uppercase">Platform <span className="text-lavender">Features</span></h3>
                     </div>
 
                     <div className="max-w-6xl mx-auto relative px-10">
-                        {/* Connecting Lines (SVG) - Re-aligned and creative Pulse Trace */}
+                        {/* Connecting Lines (SVG) */}
                         <svg viewBox="0 0 1000 100" preserveAspectRatio="none" className="absolute top-12 left-0 w-full h-32 hidden md:block" style={{ pointerEvents: 'none' }}>
                             <defs>
                                 <linearGradient id="signal-grad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -103,7 +103,7 @@ const LandingPage = () => {
                                 </linearGradient>
                             </defs>
 
-                            {/* Subtle Background Trace */}
+                            {/* Background Trace */}
                             <motion.path
                                 d="M 0,50 L 1000,50"
                                 stroke="url(#signal-grad)"
@@ -114,7 +114,7 @@ const LandingPage = () => {
                                 transition={{ duration: 1 }}
                             />
 
-                            {/* The "Pulse" Path - creative highs at each node center */}
+                            {/* Pulse Path */}
                             <motion.path
                                 d="M 0,50 
                                    L 150,50 C 160,50 160,20 166,20 C 172,20 172,50 182,50 
@@ -146,20 +146,20 @@ const LandingPage = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-20 relative z-10">
                             <NodeBlock
                                 icon={Users}
-                                title="Identity Matrix"
-                                desc="Innovators establish their technical profile within the college intranet. This is your digital DNA."
+                                title="Student Profiles"
+                                desc="Create your professional academic profile. Showcase your skills, department, and achievements."
                                 step="01"
                             />
                             <NodeBlock
                                 icon={Zap}
-                                title="Signal Broadcast"
-                                desc="Broadcasting ideas and projects as high-frequency 'Signals'. These are the pulses of innovation."
+                                title="Share Projects"
+                                desc="Publish your project ideas and innovative concepts to the entire college community."
                                 step="02"
                             />
                             <NodeBlock
                                 icon={Target}
-                                title="Project Sync"
-                                desc="Collaborators align with signals to form high-impact development nodes. Real-time mission execution."
+                                title="Find Teams"
+                                desc="Connect with talented peers from different departments to build powerful teams."
                                 step="03"
                             />
                         </div>
@@ -172,9 +172,9 @@ const LandingPage = () => {
                         <div className="w-20 h-20 sculpted-card !bg-lavender/10 flex items-center justify-center border-lavender/30">
                             <Shield size={32} className="text-lavender" />
                         </div>
-                        <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter">Secure <span className="text-lavender">Nodes</span></h4>
+                        <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter">Campus <span className="text-lavender">Network</span></h4>
                         <p className="text-lg text-platinum/50 leading-relaxed font-inter">
-                            Every collaboration on Kings Pulse occurs within a 'Secure Node'. Our intranet protocol ensures that sensitive research data and experimental code remain within the KEC network boundary. By utilizing administrative access keys, we prevent unauthorized external interference, ensuring your technical signals are synchronized only with verified college innovators.
+                            Collaboration happens within a secure, dedicated environment for Kings Engineering College. Whether you are looking for a teammate for a hackathon or feedback on your final year project, Kings Pulse connects you directly with verified students.
                         </p>
                     </div>
 
@@ -182,9 +182,9 @@ const LandingPage = () => {
                         <div className="w-20 h-20 sculpted-card !bg-lavender/10 flex items-center justify-center border-lavender/30">
                             <Cpu size={32} className="text-lavender" />
                         </div>
-                        <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter">Talent <span className="text-lavender">Matrix</span></h4>
+                        <h4 className="text-4xl font-black font-outfit uppercase tracking-tighter">Skill <span className="text-lavender">Discovery</span></h4>
                         <p className="text-lg text-platinum/50 leading-relaxed font-inter">
-                            The Talent Matrix is an advanced peer-discovery algorithm. It cross-references your 'Capabilities' across different sectors (CSE, ECE, MECH) to find the perfect technical alignment for your project. Instead of traditional lists, it visualizes innovator relationships based on skill-proximity, enabling instant formation of multidisciplinary technical teams.
+                            Our advanced search allows you to find peers based on specific skills like 'Python', 'React', or 'Machine Learning'. Break down departmental silos and build multi-disciplinary teams that can tackle real-world challenges effectively.
                         </p>
                     </div>
                 </div>
