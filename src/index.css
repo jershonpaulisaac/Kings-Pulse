@@ -4,40 +4,85 @@
 
 @layer base {
   body {
-    @apply bg-raisin text-platinum selection:bg-lavender selection:text-white font-inter;
+    @apply font-inter selection:bg-lavender selection:text-white;
   }
 }
 
 @layer components {
-  .sculpted-card {
-    @apply bg-charcoal shadow-sculpted border border-white/5;
-    clip-path: polygon(
+  /* Common Utilities */
+  .sculpted-button {
+    @apply font-bold px-6 py-3 transition-all active:scale-95 shadow-lg relative overflow-hidden;
+  }
+}
+
+/* THEMES */
+
+/* 1. PUBLIC THEME (Dark/Cyberpunk) */
+.theme-public {
+  @apply bg-raisin text-platinum;
+}
+
+.theme-public .sculpted-card {
+  @apply bg-charcoal shadow-sculpted border border-white/5;
+  clip-path: polygon(
       0% 15px, 15px 0%, 
       calc(100% - 30px) 0%, 100% 30px, 
       100% calc(100% - 15px), calc(100% - 15px) 100%, 
       20px 100%, 0% calc(100% - 20px)
     );
-  }
+}
 
-  .sculpted-button {
-    @apply bg-lavender text-platinum font-bold px-6 py-3 transition-all active:scale-95 shadow-lg hover:shadow-lavender/20;
-    clip-path: polygon(
+.theme-public .sculpted-button {
+  @apply bg-lavender text-platinum hover:shadow-lavender/20;
+  clip-path: polygon(
       10px 0%, 100% 0%, 
       100% calc(100% - 10px), calc(100% - 10px) 100%, 
       0% 100%, 0% 10px
     );
-  }
+}
 
-  .sculpted-input {
-    @apply bg-raisin border border-lavender/20 p-4 w-full focus:outline-none focus:border-lavender transition-all;
-    clip-path: polygon(
+.theme-public .sculpted-input {
+  @apply bg-raisin border border-lavender/20 p-4 w-full focus:outline-none focus:border-lavender transition-all text-white;
+  clip-path: polygon(
       0% 0%, 100% 0%, 
       100% calc(100% - 8px), calc(100% - 8px) 100%, 
       0% 100%
     );
-  }
+}
 
-  .glass-panel {
-    @apply bg-charcoal/80 backdrop-blur-xl border border-white/10;
-  }
+.theme-public .glass-panel {
+  @apply bg-charcoal/80 backdrop-blur-xl border border-white/10;
+}
+
+
+/* 2. APP THEME (Light/Clean) */
+.theme-app {
+  @apply bg-slate-50 text-slate-800;
+}
+
+.theme-app .sculpted-card {
+  @apply bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow;
+  clip-path: none; /* Reset polygon */
+}
+
+.theme-app .sculpted-button {
+  @apply bg-slate-900 text-white hover:bg-slate-800 rounded-xl shadow-slate-200;
+  clip-path: none;
+}
+
+.theme-app .sculpted-input {
+  @apply bg-white border border-slate-200 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-900;
+  clip-path: none;
+}
+
+.theme-app .glass-panel {
+  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm rounded-2xl;
+}
+
+/* Sidebar Overrides for App Theme */
+.theme-app .sidebar-link-active {
+  @apply bg-indigo-50 text-indigo-600 font-bold;
+}
+.theme-app .sidebar-link-inactive {
+  @apply text-slate-500 hover:text-slate-900 hover:bg-slate-100;
 }

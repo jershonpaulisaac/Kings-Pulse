@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext({});
 
@@ -9,18 +10,14 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         let isMounted = true;
-        console.log("AuthContext: Initiating connection...");
 
+        // Check active session
         const initSession = async () => {
             try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error) throw error;
-                if (isMounted) {
-                    console.log("AuthContext: Session retrieved", session?.user?.id || "No user");
-                    setUser(session?.user ?? null);
-                }
+                const { data: { session } } = await supabase.auth.getSession();
+                if (isMounted) setUser(session?.user ?? null);
             } catch (err) {
-                console.error("AuthContext: Session retrieval failed", err);
+                console.error("Auth init failed", err);
             } finally {
                 if (isMounted) setLoading(false);
             }
@@ -29,7 +26,6 @@ export const AuthProvider = ({ children }) => {
         initSession();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            console.log("AuthContext: Auth state changed", _event);
             if (isMounted) {
                 setUser(session?.user ?? null);
                 setLoading(false);
@@ -42,17 +38,35 @@ export const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-raisin flex flex-col items-center justify-center p-8">
-                <div className="w-16 h-16 border-4 border-lavender border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p className="text-lavender font-black tracking-[0.3em] uppercase text-xs">Synchronizing Identity...</p>
-            </div>
-        );
-    }
+    const login = async (email, password) => {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+        if (error) throw error;
+        return data;
+    };
+
+    const register = async (email, password, metadata) => {
+        // 1. Sign Up
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: metadata
+            }
+        });
+        if (error) throw error;
+        return data;
+    };
+
+    const logout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+    };
 
     return (
-        <AuthContext.Provider value={{ user, loading }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
